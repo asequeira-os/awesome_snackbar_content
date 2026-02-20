@@ -246,4 +246,43 @@ void main() {
     expect(messageWidget.style?.color, customTitleTextStyle.color);
     expect(messageWidget.style?.fontWeight, customTitleTextStyle.fontWeight);
   });
+
+  testWidgets('child widget instead of message', (WidgetTester tester) async {
+    const title = 'Test Title';
+    const child = Column(children: [Text("Line 1"), Icon(Icons.abc_outlined)],);
+    const customTitleTextStyle = TextStyle(
+      fontSize: 18.0,
+      color: Colors.blue,
+      fontWeight: FontWeight.bold,
+    );
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: AwesomeSnackbarContent(
+            title: title,
+            message: '',
+            contentType: ContentType.failure,
+            titleTextStyle: customTitleTextStyle,
+            child: child,
+          ),
+        ),
+      ),
+    );
+
+    // Find the Text widget for the message
+    final titleFinder = find.text(title);
+
+    // Get the Text widget
+    final messageWidget = tester.widget(titleFinder) as Text;
+
+    // Verify the text style
+    expect(messageWidget.style?.fontSize, customTitleTextStyle.fontSize);
+    expect(messageWidget.style?.color, customTitleTextStyle.color);
+    expect(messageWidget.style?.fontWeight, customTitleTextStyle.fontWeight);
+
+    final icon = find.byIcon(Icons.abc_outlined);
+    expect(icon, findsOne);
+  });
+
 }
