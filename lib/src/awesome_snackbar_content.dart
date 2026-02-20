@@ -38,6 +38,9 @@ class AwesomeSnackbarContent extends StatelessWidget {
   /// if you want to customize the font style of the message
   final TextStyle? messageTextStyle;
 
+  /// child Widget? if not null, is shown instead of message
+  final Widget? child;
+
   const AwesomeSnackbarContent({
     super.key,
     this.color,
@@ -47,6 +50,7 @@ class AwesomeSnackbarContent extends StatelessWidget {
     required this.message,
     required this.contentType,
     this.inMaterialBanner = false,
+    this.child = null,
   });
 
   @override
@@ -205,18 +209,20 @@ class AwesomeSnackbarContent extends StatelessWidget {
 
                 /// `message` body text parameter
                 Expanded(
-                  child: Text(
-                    message,
-                    style:
-                        messageTextStyle ??
-                        TextStyle(
-                          fontSize: isMobile ? 14 : 16,
-                          color: Colors.white,
+                  child: this.child != null
+                      ? this.child!
+                      : Text(
+                          message,
+                          style:
+                              messageTextStyle ??
+                              TextStyle(
+                                fontSize: isMobile ? 14 : 16,
+                                color: Colors.white,
+                              ),
+                          maxLines: isMobile ? 2 : 3,
+                          softWrap: true,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                    maxLines: isMobile ? 2 : 3,
-                    softWrap: true,
-                    overflow: TextOverflow.ellipsis,
-                  ),
                 ),
                 const SizedBox(height: 5),
               ],
